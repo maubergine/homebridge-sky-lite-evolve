@@ -1,7 +1,7 @@
 macos-deps:
 	brew update
 	brew bundle
-	@echo "\nMake sure to perform the post-installation tasks for nodenv if you haven't already!\n"
+	@echo "\nMake sure to perform the post-installation tasks for nodenv if you haven't already! (brew info nodenv)\n"
 
 node-deps:
 	npm install --include dev
