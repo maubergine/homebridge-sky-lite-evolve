@@ -71,6 +71,7 @@ export class EvolvePlatform implements DynamicPlatformPlugin {
       const response = await this.tuya.device.detail({
         device_id: projector.tuya_device_id,
       });
+      this.log.debug('Discovered projector:', response);
       this.devices.push({
         UniqueId: response.result.uuid,
         DisplayName: response.result.name,
