@@ -122,7 +122,7 @@
           "key": "projectors",
           "type": "array",
           "orderable": false,
-          "buttonText": "Add Projector",
+          "buttonText": "Add Another Projector",
           "title": "Projector",
           "expandable": true,
           "expanded": false,
