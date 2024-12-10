@@ -2,7 +2,7 @@ import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 
 import { EvolvePlatform } from './platform';
 
-import { TuyaContext } from '@tuya/tuya-connector-nodejs';
+import { getDeviceInfo, getDeviceStatus, postDeviceCommands } from './tuyaCloudApi';
 
 
 interface CloudState {
@@ -24,11 +24,11 @@ export class EvolveProjectorAccessory {
     // include other properties as needed
   };
 
-  private tuya = new TuyaContext({
-    baseUrl: this.platform.config.cloud_credentials.tuya_region,
-    accessKey: this.platform.config.cloud_credentials.tuya_access_key,
-    secretKey: this.platform.config.cloud_credentials.tuya_secret_key,
-  });
+  // private tuya = new TuyaContext({
+  //   baseUrl: this.platform.config.cloud_credentials.tuya_region,
+  //   accessKey: this.platform.config.cloud_credentials.tuya_access_key,
+  //   secretKey: this.platform.config.cloud_credentials.tuya_secret_key,
+  // });
 
   // Service declarations. See createServices() for initialization.
   private powerSwitchService?:Service;
@@ -73,14 +73,12 @@ export class EvolveProjectorAccessory {
   private async getDeviceDetails() {
     this.platform.log.debug('Fetching device details for <Device ID: ', this.accessory.context.device.TuyaDeviceId);
     try {
-      const device = await this.tuya.device.detail({
-        device_id: this.accessory.context.device.TuyaDeviceId,
-      });
-      // this.platform.log.debug('Device Details: ', device);
+      const device = getDeviceInfo(this.accessory.context.device.TuyaDeviceId, this.platform.config, this.platform.log);
+      this.platform.log.debug('Device Details: ', device);
       this.cloud_state.initialized = true;
       this.platform.log.debug('Device initialized!');
       return device;
-      // this.platform.log.debug('Initial cloud state: ', JSON.stringify(this.cloud_state));
+      this.platform.log.debug('Initial cloud state: ', JSON.stringify(this.cloud_state));
     } catch (error) {
       this.platform.log.error('Failed to initialize device:', error);
     }
@@ -172,12 +170,8 @@ export class EvolveProjectorAccessory {
       this.platform.log.debug('Device is not initialized yet. Cannot refresh status.');
     } else {
       this.platform.log.debug(`Refreshing status of <Device ID: ${this.device.result.id}> from Tuya cloud...`);
-      await this.tuya.request({
-        path: `/v1.0/devices/${this.device.result.id}/status`,
-        method: 'GET',
-        query: {},
-      }).then(async (response) => {
-      // this.platform.log.debug('Tuya response (response): ', JSON.stringify(response));
+      await getDeviceStatus(this.accessory.context.device.TuyaDeviceId, this.platform.config, this.platform.log).then(async (response) => {
+        this.platform.log.debug('Tuya response (response): ', JSON.stringify(response));
         let resultObject: { [key: string]: string } = {};
 
         if (Array.isArray(response.result)) {
@@ -211,19 +205,13 @@ export class EvolveProjectorAccessory {
    */
   async updateCloudState(code: string, new_value: boolean | string | number): Promise<void> {
     this.platform.log.debug('Pushing new state to Tuya cloud...');
-    await this.tuya.request({
-      path: `/v1.0/devices/${this.device.result.id}/commands`,
-      method: 'POST',
-      query: {},
-      body: {
-        'commands':[
-          {
-            'code': code,
-            'value': new_value,
-          },
-        ],
-      },
-    }).then(async (response) => {
+    await postDeviceCommands(
+      this.accessory.context.device.TuyaDeviceId,
+      this.platform.config,
+      this.platform.log,
+      code,
+      new_value,
+    ).then(async (response) => {
       this.platform.log.debug('Response successful: ', String(response.success));
       if (response.result === true) {
         // this.platform.log.debug('Successfully pushed new state to Tuya cloud!');
