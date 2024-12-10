@@ -23,8 +23,8 @@
     "tuya"
   ],
   "engines": {
-    "node": "^18.17.0 || ^20.9.0",
-    "homebridge": "^1.8.1"
+    "node": "^18.17.0 || ^20.18.0",
+    "homebridge": "^1.8.5"
   },
   "main": "dist/index.js",
   "scripts": {
@@ -34,16 +34,16 @@
     "prepublishOnly": "npm run lint && npm run build"
   },
   "dependencies": {
-    "@tuya/tuya-connector-nodejs": "^2.1.2",
-    "@tuyapi/cli": "^1.18.3"
+    "qs": "^6.13.1",
+    "tuya-cloud-sdk-nodejs-ex": "^1.1.4"
   },
   "devDependencies": {
     "@types/node": "^18.16.20",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.45.0",
-    "homebridge": "1.8.1",
-    "homebridge-config-ui-x": "^4.56.2",
+    "homebridge": "1.8.5",
+    "homebridge-config-ui-x": "^4.65.0",
     "nodemon": "^2.0.22",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
