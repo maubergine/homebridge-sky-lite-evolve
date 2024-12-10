@@ -8,3 +8,4 @@
 - Better docs for onboarding via IoT Cloud
 - Support for Sky Lite Evolve Cloud? Is it even a thing? https://blisslights.com/pages/sky-lite-cloud
 - Apply for Homebridge Verified program: https://github.com/homebridge/verified
+- Add compatibility for Homebridge v2
