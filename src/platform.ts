@@ -3,7 +3,8 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { EvolveProjectorAccessory } from './projectorAccessory';
 
-import { TuyaContext } from '@tuya/tuya-connector-nodejs';
+import { getDeviceInfo } from './tuyaCloudApi';
+
 
 /**
  * HomebridgePlatform
@@ -21,6 +22,7 @@ export class EvolvePlatform implements DynamicPlatformPlugin {
     public readonly log: Logger,
     public readonly config: PlatformConfig,
     public readonly api: API,
+
   ) {
     this.log.debug('Finished initializing platform:', this.config.name);
 
@@ -28,8 +30,8 @@ export class EvolvePlatform implements DynamicPlatformPlugin {
     // Dynamic Platform plugins should only register new accessories after this event was fired,
     // in order to ensure they weren't added to homebridge already. This event can also be used
     // to start discovery of new accessories.
-    this.api.on('didFinishLaunching', () => {
-      log.debug('Executed didFinishLaunching callback');
+    this.api.on('didFinishLaunching', async () => {
+      this.log.debug('Executed didFinishLaunching callback');
       // run the method to discover / register your devices as accessories
       this.discoverDevices();
     });
@@ -43,12 +45,6 @@ export class EvolvePlatform implements DynamicPlatformPlugin {
     Model: string;
     SerialNumber: string;
   }> = [];
-
-  private tuya = new TuyaContext({
-    baseUrl: this.config.cloud_credentials.tuya_region,
-    accessKey: this.config.cloud_credentials.tuya_access_key,
-    secretKey: this.config.cloud_credentials.tuya_secret_key,
-  });
 
   /**
    * This function is invoked when homebridge restores cached accessories from disk at startup.
@@ -67,10 +63,9 @@ export class EvolvePlatform implements DynamicPlatformPlugin {
    * must not be registered again to prevent "duplicate UUID" errors.
    */
   async discoverDevices() {
+    // loop over the discovered devices and register each one
     for (const projector of this.config.projectors) {
-      const response = await this.tuya.device.detail({
-        device_id: projector.tuya_device_id,
-      });
+      const response = await getDeviceInfo(projector.tuya_device_id, this.config, this.log);
       this.log.debug('Discovered projector:', response);
       this.devices.push({
         UniqueId: response.result.uuid,
