@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlatformConfig, Logger } from 'homebridge';
 
 import * as qs from 'qs';
@@ -83,7 +84,7 @@ export async function getDeviceStatus(deviceId: string, config: PlatformConfig, 
 }
 
 
-export async function postDeviceCommands(deviceId: string, config: PlatformConfig, logger: Logger, code: string, new_value: any) {
+export async function postDeviceCommands(deviceId: string, config: PlatformConfig, logger: Logger, code: string, new_value: string) {
   const token = await getTuyaToken(config, logger);
   const query = {};
   const method = 'POST';
@@ -135,6 +136,7 @@ async function encryptStr(str: string, secret: string): Promise<string> {
 async function getRequestSign(
   path: string,
   method: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   headers: { [k: string]: string } = {},
   query: { [k: string]: any } = {},
   body: { [k: string]: any } = {},
