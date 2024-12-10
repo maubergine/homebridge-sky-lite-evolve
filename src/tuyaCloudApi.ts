@@ -84,7 +84,13 @@ export async function getDeviceStatus(deviceId: string, config: PlatformConfig, 
 }
 
 
-export async function postDeviceCommands(deviceId: string, config: PlatformConfig, logger: Logger, code: string, new_value: string) {
+export async function postDeviceCommands(
+  deviceId: string,
+  config: PlatformConfig,
+  logger: Logger,
+  code: string,
+  new_value: boolean | string | number,
+) {
   const token = await getTuyaToken(config, logger);
   const query = {};
   const method = 'POST';
