@@ -10,6 +10,7 @@ install: macos-deps node-deps
 
 clean:
 	rm -rf node_modules
+	rm -rf dist
 
 run: node-deps
 	npm exec hb-service run
