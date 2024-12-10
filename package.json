@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Sky Lite Evolve",
   "name": "homebridge-sky-lite-evolve",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "A Homebridge plugin for the BlissLights Sky Lite Evolve Star Projector.",
   "license": "MIT",
   "author": "Kevbo (https://github.com/kevbo/homebridge-sky-lite-evolve)",
@@ -30,12 +30,12 @@
   "scripts": {
     "lint": "eslint src/**.ts --max-warnings=0",
     "watch": "npm run build && npm link && nodemon",
-    "build": "npx rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc",
     "prepublishOnly": "npm run lint && npm run build"
   },
   "dependencies": {
-    "qs": "^6.13.1",
-    "tuya-cloud-sdk-nodejs-ex": "^1.1.4"
+    "axios": "^1.7.9",
+    "qs": "^6.13.1"
   },
   "devDependencies": {
     "@types/node": "^18.16.20",
