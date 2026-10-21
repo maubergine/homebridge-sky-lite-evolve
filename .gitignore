@@ -118,3 +118,15 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+# Keys, certificates and secrets: never commit them
+*.pem
+*.key
+*.p12
+*.p8
+*.pfx
+*.mobileprovision
+*.cer
+*.har
+.env.*
+!.env.example
