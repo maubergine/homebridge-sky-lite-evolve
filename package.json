@@ -23,7 +23,7 @@
     "tuya"
   ],
   "engines": {
-    "node": "^18.17.0 || ^20.18.0",
+    "node": "^20.18.0",
     "homebridge": "^1.8.5"
   },
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
-    "@types/node": "^18.19.130",
+    "@types/node": "^20.19.43",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.45.0",
